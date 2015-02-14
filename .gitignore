@@ -1,3 +1,11 @@
+# Use Makefile as a soft link to your platform makefile (Makefile.linux/Makefile.mac)
+Makefile
+
+.settings
+.cproject
+.project
+build/
+
 # Object files
 *.o
 *.ko
