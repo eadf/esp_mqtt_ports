@@ -138,7 +138,7 @@ void user_init(void) {
 
   // Make uart0 work with just the TX pin. Baud:115200,n,8,1
   // The RX pin is now free for GPIO use.
-  stdoutInit();
+  stdout_init();
 
   //Set the setup timer
   os_timer_disarm(&setup_timer);
