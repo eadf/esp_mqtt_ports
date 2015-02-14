@@ -20,7 +20,7 @@ ESPPORT		?= /dev/tty.usbserial
 TARGET		= app
 
 # which modules (subdirectories) of the project to include in compiling
-MODULES		= driver/easygpio mqtt driver/i2c driver/mcp23017 driver/stdout user
+MODULES		= driver/easygpio mqtt/mqtt driver/i2c driver/mcp23017 driver/stdout user
 EXTRA_INCDIR    = include $(SDK_BASE)/../include
 
 # libraries used in this project, mainly provided by the SDK
