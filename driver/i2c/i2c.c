@@ -42,7 +42,7 @@ static bool i2c_beginTransmission(I2C_Self *self, uint8_t deviceAddr, bool read)
 static void ICACHE_FLASH_ATTR
 i2c_sda(I2C_Self* self, uint8_t state) {
   //Set SDA line to state
-  GPIO_OUTPUT_SET(self->sda_pin, state&1);
+  GPIO_OUTPUT_SET(self->sda_pin, state);
 }
 
 /**
@@ -52,7 +52,7 @@ i2c_sda(I2C_Self* self, uint8_t state) {
 static void ICACHE_FLASH_ATTR
 i2c_sck(I2C_Self* self, uint8_t state) {
   //Set SCK line to state
-  GPIO_OUTPUT_SET(self->scl_pin, state&1);
+  GPIO_OUTPUT_SET(self->scl_pin, state);
 }
 
 /**
