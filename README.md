@@ -1,17 +1,30 @@
 # esp_mqtt_ports
 
+Control up to 512 digital pins [with your smartphone](http://www.openhab.org/) and one esp8266 (with 8 GPIOS).
+
+This can be done by connecting 4*8 [mcp23017](http://www.microchip.com/wwwproducts/Devices.aspx?dDocName=en023499) port expanders to the GPIO ports like this.
+
+I²C group | scl | sda
+----------|-----|-----
+0         |GPIO0|GPIO2
+1         |GPIO4|GPIO5
+2         |GPIO12|GPI13
+3         |GPIO14|GPI15
 
 
-Work in progress. Nothing works yet.
+###mqtt format
 
+topic: ```/deviceid/portexpander```  deviceid is unique to each esp, look in the console. 
 
+message: ```GABBBBBBBBBBBBBBBB``` where 
+* G = I²C group [0..3]
+* A = Address within I²C group [0..7]
+* BBBBBBBBBBBBBBBB = binary of pin status, msb first
+ 
+If you want to set the first pin high (rest low) on the second mcp23017 (address 1) in the third I²C group (2) you send this message:```"210000000000000001"``` 
 
-
-
-
-
-Control up to 512 digital pins with your smartphone and one esp8266 (with 8 GPIOS).
-
+###License
+GPL v3
 
 The makefile is copied from [esp_mqtt.](https://github.com/tuanpmt/esp_mqtt)
 
