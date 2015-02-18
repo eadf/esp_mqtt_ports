@@ -46,7 +46,7 @@ static volatile os_timer_t setup_timer;
 #define user_procTaskQueueLen    1
 os_event_t user_procTaskQueue[user_procTaskQueueLen];
 
-static char portTopic[10]; // The MAC address
+static char portTopic[25]; // The MAC address
 static MCP23017_Self portExpanders[4];
 
 static void setup(void);
@@ -185,8 +185,7 @@ void user_init(void) {
   os_timer_arm(&setup_timer, 1000, false);
 
   //Start os task
-  system_os_task(user_procTask, user_procTaskPrio, user_procTaskQueue,
-      user_procTaskQueueLen);
+  system_os_task(user_procTask, user_procTaskPrio, user_procTaskQueue, user_procTaskQueueLen);
 
   INFO("\nSystem started ...\n");
 }
