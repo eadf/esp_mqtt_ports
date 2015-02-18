@@ -37,6 +37,7 @@
 #include "user_interface.h"
 #include "mem.h"
 #include "stdout/stdout.h"
+#include "mcp23017/mcp23017.h"
 
 MQTT_Client mqttClient;
 
@@ -45,11 +46,15 @@ static volatile os_timer_t setup_timer;
 #define user_procTaskQueueLen    1
 os_event_t user_procTaskQueue[user_procTaskQueueLen];
 
+static char portTopic[10]; // The MAC address
+static MCP23017_Self portExpanders[4];
+
 static void setup(void);
 
 void ICACHE_FLASH_ATTR
 wifiConnectCb(uint8_t status) {
 
+  os_sprintf(portTopic, "/%0x/portexpander", system_get_chip_id());
   if (status == STATION_GOT_IP) {
     MQTT_Connect(&mqttClient);
   } else {
@@ -62,14 +67,10 @@ mqttConnectedCb(uint32_t *args) {
 
   MQTT_Client* client = (MQTT_Client*) args;
   INFO("MQTT: Connected\n");
-  MQTT_Subscribe(client, "/mqtt/topic/0", 0);
-  MQTT_Subscribe(client, "/mqtt/topic/1", 1);
-  MQTT_Subscribe(client, "/mqtt/topic/2", 2);
-
-  MQTT_Publish(client, "/mqtt/topic/0", "hello0", 6, 0, 0);
-  MQTT_Publish(client, "/mqtt/topic/1", "hello1", 6, 1, 0);
-  MQTT_Publish(client, "/mqtt/topic/2", "hello2", 6, 2, 0);
-
+  char *topicBuf = (char*) os_zalloc(30);
+  os_sprintf(topicBuf, "%s", portTopic);
+  MQTT_Subscribe(client, topicBuf, 0);
+  os_free(topicBuf);
 }
 
 void ICACHE_FLASH_ATTR
@@ -89,8 +90,9 @@ mqttPublishedCb(uint32_t *args) {
 void ICACHE_FLASH_ATTR
 mqttDataCb(uint32_t *args, const char* topic, uint32_t topic_len, const char *data, uint32_t data_len) {
 
-  char *topicBuf = (char*) os_zalloc(topic_len + 1), *dataBuf =
-      (char*) os_zalloc(data_len + 1);
+  char *topicBuf = (char*) os_zalloc(topic_len + 1);
+  char *dataBuf = (char*) os_zalloc(data_len + 1);
+  char *sp = topicBuf;
 
   MQTT_Client* client = (MQTT_Client*) args;
 
@@ -101,6 +103,34 @@ mqttDataCb(uint32_t *args, const char* topic, uint32_t topic_len, const char *da
   dataBuf[data_len] = 0;
 
   INFO("Receive topic: %s, data: %s \n", topicBuf, dataBuf);
+
+  if (strncmp(topicBuf, portTopic, strlen(portTopic)) == 0 &&
+      strlen(dataBuf) == 18) {
+    sp = dataBuf;
+    if (sp[0] >= '0' && sp[0] <= '3' &&
+        sp[1] >= '0' && sp[1] <= '7') {
+      uint8_t group = sp[0]-'0';
+      uint8_t addr = sp[1]-'0';
+      int8_t i = 0;
+      sp = dataBuf+2;
+      uint16_t bits = 0;
+      for (i=15; sp[0]!=0 && i>=0; i--,sp++) {
+        if (sp[0] == '0') {
+          continue;
+        } else if (sp[0] == '1') {
+          bits |= 1<<i;
+        } else {
+          break;
+        }
+      }
+      if (i==-1){
+        os_printf("I2C group %d, address %d received data: %0x\n", group, addr, bits);
+        mcp23017_digitalWriteAB(portExpanders+group, addr, bits);
+      } else {
+        os_printf("Syntax error:%s (i=%d)\n", dataBuf, i);
+      }
+    }
+  }
   os_free(topicBuf);
   os_free(dataBuf);
 }
@@ -111,17 +141,12 @@ user_procTask(os_event_t *events) {
   os_delay_us(10);
 }
 
-void ICACHE_FLASH_ATTR
-setup() {
+static void ICACHE_FLASH_ATTR
+setup(void) {
   CFG_Load();
 
-  MQTT_InitConnection(&mqttClient, sysCfg.mqtt_host, sysCfg.mqtt_port,
-      sysCfg.security);
-  //MQTT_InitConnection(&mqttClient, "192.168.11.122", 1880, 0);
-
-  MQTT_InitClient(&mqttClient, sysCfg.device_id, sysCfg.mqtt_user,
-      sysCfg.mqtt_pass, sysCfg.mqtt_keepalive, 1);
-  //MQTT_InitClient(&mqttClient, "client_id", "user", "pass", 120, 1);
+  MQTT_InitConnection(&mqttClient, sysCfg.mqtt_host, sysCfg.mqtt_port, sysCfg.security);
+  MQTT_InitClient(&mqttClient, sysCfg.device_id, sysCfg.mqtt_user, sysCfg.mqtt_pass, sysCfg.mqtt_keepalive, 1);
 
   MQTT_InitLWT(&mqttClient, "/lwt", "offline", 0, 0);
   MQTT_OnConnected(&mqttClient, mqttConnectedCb);
@@ -130,6 +155,20 @@ setup() {
   MQTT_OnData(&mqttClient, mqttDataCb);
 
   WIFI_Connect(sysCfg.sta_ssid, sysCfg.sta_pwd, wifiConnectCb);
+
+  mcp23017_init(portExpanders+0, 0, 2); // i2c group 0 = GPIO0, GPIO2
+  mcp23017_init(portExpanders+1, 4, 5); // i2c group 1 = GPIO4, GPIO5
+  mcp23017_init(portExpanders+2,12,13); // i2c group 2 = GPIO12,GPI13
+  mcp23017_init(portExpanders+3,14,15); // i2c group 3 = GPIO14,GPI15
+
+  // set every possible mcp23017 as output only
+  int i=0;
+  for (i=0; i<8; i++){
+    mcp23017_pinModeAB(portExpanders+0, i, MCP23017_OUTPUT);
+    mcp23017_pinModeAB(portExpanders+1, i, MCP23017_OUTPUT);
+    mcp23017_pinModeAB(portExpanders+2, i, MCP23017_OUTPUT);
+    mcp23017_pinModeAB(portExpanders+3, i, MCP23017_OUTPUT);
+  }
 }
 
 void user_init(void) {
