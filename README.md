@@ -13,9 +13,9 @@ I²C group | scl | sda
 
 ###mqtt format
 
-topic: ```/deviceid/portexpander```  deviceid is unique to each esp, look in the console. 
+topic: ```"/deviceId/portexpander"```  deviceId is unique to each esp, look in the console. 
 
-message: ```GABBBBBBBBBBBBBBBB``` where 
+message: ```"GABBBBBBBBBBBBBBBB"``` where:
 * G = I²C group [0..3]
 * A = Address within I²C group [0..7]
 * BBBBBBBBBBBBBBBB = binary of pin status, msb first
