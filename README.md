@@ -11,6 +11,8 @@ I²C group | scl | sda
 2         |GPIO12|GPI13
 3         |GPIO14|GPI15
 
+This is only the default pinout, it's really easy to change.
+
 ###mqtt format
 
 topic: ```"/deviceId/portexpander"```  deviceId is unique to each esp, look in the console. 
