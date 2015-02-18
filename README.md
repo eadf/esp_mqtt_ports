@@ -11,7 +11,6 @@ I²C group | scl | sda
 2         |GPIO12|GPI13
 3         |GPIO14|GPI15
 
-
 ###mqtt format
 
 topic: ```/deviceid/portexpander```  deviceid is unique to each esp, look in the console. 
@@ -22,6 +21,10 @@ message: ```GABBBBBBBBBBBBBBBB``` where
 * BBBBBBBBBBBBBBBB = binary of pin status, msb first
  
 If you want to set the first pin high (rest low) on the second mcp23017 (address 1) in the third I²C group (2) you send this message:```"210000000000000001"``` 
+
+### todo
+* tests, it seems to work. but i have not tested a full compliment of mcp23017:s.
+* input mode
 
 ###License
 GPL v3
