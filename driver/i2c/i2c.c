@@ -41,44 +41,18 @@ static bool i2c_beginTransmission(I2C_Self *self, uint8_t deviceAddr, bool read)
  */
 static void ICACHE_FLASH_ATTR
 i2c_sda(I2C_Self* self, uint8_t state) {
-  state &= 0x01;
   //Set SDA line to state
-  GPIO_OUTPUT_SET(self->sda_pin, state);
-  if (false){
-    if (state)
-      gpio_output_set(1 << self->sda_pin, 0, 1 << self->sda_pin, 0);
-    else
-      gpio_output_set(0, 1 << self->sda_pin, 1 << self->sda_pin, 0);
-  //} else {
-    GPIO_DIS_OUTPUT(self->sda_pin);
-    if (state) {
-      PIN_PULLDWN_DIS(self->sda_name);
-      PIN_PULLUP_EN(self->sda_name);
-    } else {
-      PIN_PULLUP_DIS(self->sda_name);
-      PIN_PULLDWN_EN(self->sda_name);
-    }
-    //
-  }
+  GPIO_OUTPUT_SET(self->sda_pin, state&1);
 }
 
 /**
  * Set SCK to state
  * This should *really* be done with the pull-up/downs but it does not work :/
- * And if we are using the pin as a real output pin why not use
- * GPIO_OUTPUT_SET(pin, value);?
  */
 static void ICACHE_FLASH_ATTR
 i2c_sck(I2C_Self* self, uint8_t state) {
   //Set SCK line to state
-  if (false){
-    if (state)
-      gpio_output_set(1 << self->scl_pin, 0, 1 << self->scl_pin, 0);
-    else
-      gpio_output_set(0, 1 << self->scl_pin, 1 << self->scl_pin, 0);
-  } else {
-    GPIO_OUTPUT_SET(self->scl_pin, state);
-  }
+  GPIO_OUTPUT_SET(self->scl_pin, state&1);
 }
 
 /**
