@@ -61,14 +61,14 @@ bitutils_printBool(uint8_t *data, uint16_t from, uint16_t to) {
   if (from < to) {
     for (i=from; i<=to; i++) {
       os_printf(bitutils_getBit(data,i)?"1":"0");
-      if(i>0 && i%8==0) {
+      if(i>0 && (i+1)%8==0) {
         os_printf(" ");
       }
     }
   } else {
     for (i=from; i>=to; i--) {
       os_printf(bitutils_getBit(data,i)?"1":"0");
-      if(i>0 && i%8==0) {
+      if(i>0 && (i+1)%8==0) {
         os_printf(" ");
       }
     }
