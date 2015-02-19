@@ -30,6 +30,7 @@
 */
 
 #include "bitutils/bitutils.h"
+#include "osapi.h"
 
 /**
  * sets the 'bitNumber' bit to 'bitValue'
@@ -47,6 +48,29 @@ bitutils_setBit(uint8_t *data, uint16_t bitNumber, bool bitValue) {
  * returns the 'bitNumber' bit
  */
 bool ICACHE_FLASH_ATTR
-bitutils_getBit(uint8_t *data, uint16_t bit) {
-  return (data[bit/8] >> (bit % 8)) & 0x1;
+bitutils_getBit(uint8_t *data, uint16_t bitNumber) {
+  return (data[bitNumber/8] >> (bitNumber%8)) & 0x1;
+}
+
+/**
+ * print the bits with os_printf(). Range is inclusive.
+ */
+void ICACHE_FLASH_ATTR
+bitutils_printBool(uint8_t *data, uint16_t from, uint16_t to) {
+  uint16_t i = 0;
+  if (from < to) {
+    for (i=from; i<=to; i++) {
+      os_printf(bitutils_getBit(data,i)?"1":"0");
+      if(i>0 && i%8==0) {
+        os_printf(" ");
+      }
+    }
+  } else {
+    for (i=from; i>=to; i--) {
+      os_printf(bitutils_getBit(data,i)?"1":"0");
+      if(i>0 && i%8==0) {
+        os_printf(" ");
+      }
+    }
+  }
 }

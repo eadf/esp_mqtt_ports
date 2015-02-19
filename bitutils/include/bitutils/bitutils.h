@@ -43,4 +43,9 @@ void bitutils_setBit(uint8_t *data, uint16_t bitNumber, bool bitValue);
  */
 bool bitutils_getBit(uint8_t *data, uint16_t bit);
 
+/**
+ * print the bits with os_printf(). Range is inclusive.
+ */
+void bitutils_printBool(uint8_t *data, uint16_t from, uint16_t to);
+
 #endif /* BITUTILS_INCLUDE_BITUTILS_BITUTILS_H_ */

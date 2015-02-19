@@ -175,6 +175,9 @@ setup(void) {
       bitutils_setBit(detectedExpanders, i+j*8, detected);
     }
   }
+  os_printf("detected expanders: ");
+  bitutils_printBool(detectedExpanders, 0, 4*8);
+  os_printf("\n");
 }
 
 void user_init(void) {
