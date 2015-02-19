@@ -97,7 +97,7 @@ endif
 
 
 # which modules (subdirectories) of the project to include in compiling
-MODULES        = localinclude driver/easygpio mqtt/mqtt mqtt/modules driver/i2c driver/mcp23017 driver/stdout user
+MODULES        = localinclude bitutils driver/easygpio mqtt/mqtt mqtt/modules driver/i2c driver/mcp23017 driver/stdout user
 EXTRA_INCDIR    = include $(SDK_BASE)/../include
 
 # libraries used in this project, mainly provided by the SDK

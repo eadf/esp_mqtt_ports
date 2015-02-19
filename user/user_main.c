@@ -48,6 +48,7 @@ os_event_t user_procTaskQueue[user_procTaskQueueLen];
 
 static char portTopic[25]; // The MAC address
 static MCP23017_Self portExpanders[4];
+static uint8_t detectedExpanders[4];
 
 static void setup(void);
 
@@ -162,12 +163,17 @@ setup(void) {
   mcp23017_init(portExpanders+3,14,15); // i2c group 3 = GPIO14,GPI15
 
   // set every possible mcp23017 as output only
-  int i=0;
-  for (i=0; i<8; i++){
-    mcp23017_pinModeAB(portExpanders+0, i, MCP23017_OUTPUT);
-    mcp23017_pinModeAB(portExpanders+1, i, MCP23017_OUTPUT);
-    mcp23017_pinModeAB(portExpanders+2, i, MCP23017_OUTPUT);
-    mcp23017_pinModeAB(portExpanders+3, i, MCP23017_OUTPUT);
+  int i=0, j=0;
+  for (j=0; j<4; j++) {
+    for (i=0; i<8; i++) {
+      bool detected = mcp23017_pinModeAB(portExpanders+j, i, MCP23017_OUTPUT);
+      if (detected) {
+        os_printf("Detected a mcp23017 at I2C group %d address = %d\n", j, i);
+      } else {
+        os_printf("Could not detect any mcp23017 at I2C group %d address = %d\n", j, i);
+      }
+      bitutils_setBit(detectedExpanders, i+j*8, detected);
+    }
   }
 }
 
