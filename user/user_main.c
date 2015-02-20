@@ -176,7 +176,7 @@ setup(void) {
     }
   }
   os_printf("detected expanders: ");
-  bitutils_printBool(detectedExpanders, 0, 4*8);
+  bitutils_printBool(detectedExpanders, 0, 4*8-1);
   os_printf("\n");
 }
 
