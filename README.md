@@ -15,14 +15,14 @@ This is only the default pinout, it's really easy to change.
 
 ###mqtt format
 
-topic: ```"/deviceId/portexpander"```  deviceId is unique to each esp, look in the console. 
+topic: ```/deviceId/portexpander```  deviceId is unique to each esp, look in the console. 
 
-message: ```"GABBBBBBBBBBBBBBBB"``` where:
+message: ```GABBBBBBBBBBBBBBBB``` where:
 * G = I²C group [0..3]
 * A = Address within I²C group [0..7]
 * BBBBBBBBBBBBBBBB = binary of pin status, msb first
  
-If you want to set the first pin high (rest low) on the second mcp23017 (address 1) in the third I²C group (2) you send this message:```"210000000000000001"``` 
+If you want to set the first pin high (rest low) on the second mcp23017 (address 1) in the third I²C group (2) you send this message:```210000000000000001``` 
 
 ### todo
 * tests, it seems to work - but i have not tested a full compliment of mcp23017:s.
