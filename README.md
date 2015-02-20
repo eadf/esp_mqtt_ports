@@ -2,7 +2,7 @@
 
 Control up to 512 digital pins [with your smartphone](http://www.openhab.org/) and one esp8266 (with 8 GPIOS).
 
-This can be done by connecting 4*8 [mcp23017](http://www.microchip.com/wwwproducts/Devices.aspx?dDocName=en023499) port expanders to the GPIO ports like this.
+This can be done by connecting 4*8 [mcp23017 (I²C version)](http://www.microchip.com/wwwproducts/Devices.aspx?dDocName=en023499) port expanders to the GPIO ports like this.
 
 I²C group | scl | sda| mcp23017
 ----------|-----|-----|--------------
