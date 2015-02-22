@@ -29,24 +29,10 @@ CheckBox addCheckbox(ControlP5 cp5, String name, PVector pos) {
     .setItemsPerRow(16)
     .setSpacingColumn(7)
     .setSpacingRow(7)
-    .addItem(name+"1", 1)
-    .addItem(name+"2", 2)
-    .addItem(name+"3", 3)
-    .addItem(name+"4", 4)
-    .addItem(name+"5", 5)
-    .addItem(name+"6", 6)
-    .addItem(name+"7", 7)
-    .addItem(name+"8", 8)
-    .addItem(name+"9", 9)
-    .addItem(name+"10", 10)
-    .addItem(name+"11", 11)
-    .addItem(name+"12", 12)
-    .addItem(name+"13", 13)
-    .addItem(name+"14", 14)
-    .addItem(name+"15", 15)
-    .addItem(name+"16", 16)
-    .hideLabels();
-  return rv;
+  for (int i=1;i<=16;i++) {  
+    rv.addItem(name+i, i);
+  }
+  return rv.hideLabels();
 }
 
 void setup() {
