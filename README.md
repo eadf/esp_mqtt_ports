@@ -13,7 +13,7 @@ I²C group | sda | scl | mcp23017
 
 Be careful with GPIO4 and GPIO5, they are sometimes mislabeled on the silkscreen.
 
-You can add pullups to the ```scl``` pins too, but they are always driven by the esp so it's not required.
+You can add pullups to the ```scl``` pins too, but they are always driven by the esp so that's not required.
 
 Take care with the boot mode pins of the esp, GPIO0, GPIO2 should be high and GPIO15 should be low at normal bootup (did i get that right?). 
 
@@ -62,3 +62,10 @@ make clean && make test
 You won't be needing esptool, the makefile only uses esptool.py (provided by [esp_open_sdk](https://github.com/pfalcon/esp-open-sdk))
 
 I have tested this with sdk v0.9.5 and v0.9.4 (linux & mac)
+
+### Processing demo
+
+I've created a simple processing sketch that sends mqtt messages to the esp.
+You will have to adjust the address of your mqtt broker and the topic your esp listens to.
+
+The sketch uses [ControlP5](http://www.sojamo.de/libraries/controlP5/) and [processing-mqtt](https://github.com/256dpi/processing-mqtt)
