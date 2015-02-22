@@ -160,7 +160,7 @@ setup(void) {
   mcp23017_init(portExpanders+0, 0, 2); // i2c group 0 = GPIO0, GPIO2
   mcp23017_init(portExpanders+1, 4, 5); // i2c group 1 = GPIO4, GPIO5
   mcp23017_init(portExpanders+2,12,13); // i2c group 2 = GPIO12,GPI13
-  mcp23017_init(portExpanders+3,14,15); // i2c group 3 = GPIO14,GPI15
+  mcp23017_init(portExpanders+3,15,14); // i2c group 3 = GPIO15,GPI14 (gpio15 should be low at bootup (pulldown), that's why i put it on the driven clock pin)
 
   // set every possible mcp23017 as output only
   int i=0, j=0;
