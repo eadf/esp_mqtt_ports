@@ -4,12 +4,12 @@ Control up to 512 digital pins [with your smartphone](http://www.openhab.org/) a
 
 This can be done by connecting 4*8 [mcp23017 (I²C version)](http://www.microchip.com/wwwproducts/Devices.aspx?dDocName=en023499) port expanders to the GPIO ports like this.
 
-I²C group | scl | sda| mcp23017
+I²C group | sda | scl | mcp23017
 ----------|-----|-----|--------------
 0         |GPIO0+10KΩ pullup|GPIO2 +10KΩ pullup| 8*mcp23017 with addess 0..7
-1         |GPIO4|GPIO5 +10KΩ pullup|8*mcp23017 with addess 0..7
-2         |GPIO12|GPIO13 +10KΩ pullup|8*mcp23017 with addess 0..7
-3         |GPIO15+10KΩ pulldown|GPIO14 +10KΩ pullup|8*mcp23017 with addess 0..7
+1         |GPIO4+10KΩ pullup|GPIO5 |8*mcp23017 with addess 0..7
+2         |GPIO12+10KΩ pullup|GPIO13 |8*mcp23017 with addess 0..7
+3         |GPIO14 +10KΩ pullup|GPIO15+10KΩ pulldown|8*mcp23017 with addess 0..7
 
 Be careful with GPIO4 and GPIO5, they are sometimes mislabeled on the silkscreen.
 
