@@ -8,8 +8,8 @@ I²C group | scl | sda| mcp23017
 ----------|-----|-----|--------------
 0         |GPIO0|GPIO2 +10KΩ pullup| 8*mcp23017 with addess 0..7
 1         |GPIO4|GPIO5 +10KΩ pullup|8*mcp23017 with addess 0..7
-2         |GPIO12|GPI13 +10KΩ pullup|8*mcp23017 with addess 0..7
-3         |GPIO15|GPI14 +10KΩ pullup|8*mcp23017 with addess 0..7
+2         |GPIO12|GPIO13 +10KΩ pullup|8*mcp23017 with addess 0..7
+3         |GPIO15|GPIO14 +10KΩ pullup|8*mcp23017 with addess 0..7
 
 You can add pullups to the ```scl``` pins too, but they are always driven by the esp so it's not required.
 
