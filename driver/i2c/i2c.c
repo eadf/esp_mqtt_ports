@@ -181,15 +181,13 @@ i2c_readByteCheckAck(I2C_Self* self, uint8_t *data) {
  */
 static bool ICACHE_FLASH_ATTR
 i2c_writeByteCheckAck(I2C_Self* self, uint8_t data) {
-  uint8_t data_bit;
   uint8_t sdap = self->sda_pin;
   uint8_t sclp = self->scl_pin;
 
   int8_t i;
   bool rv = 0;
   for (i = 7; i >= 0; i--) {
-    data_bit = (data >> i)&0x1;
-    GPIO_OUTPUT_SET(sdap, data_bit);
+    GPIO_OUTPUT_SET(sdap, (data >> i)&0x1);
     i2c_delay_us(I2C_SLEEP_TIME);
     GPIO_OUTPUT_SET(sclp, 1);
     i2c_delay_us(I2C_SLEEP_TIME);
