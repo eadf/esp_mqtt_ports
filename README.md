@@ -6,10 +6,12 @@ This can be done by connecting 4*8 [mcp23017 (I²C version)](http://www.microchi
 
 I²C group | scl | sda| mcp23017
 ----------|-----|-----|--------------
-0         |GPIO0|GPIO2 +10KΩ pullup| 8*mcp23017 with addess 0..7
+0         |GPIO0+10KΩ pullup|GPIO2 +10KΩ pullup| 8*mcp23017 with addess 0..7
 1         |GPIO4|GPIO5 +10KΩ pullup|8*mcp23017 with addess 0..7
 2         |GPIO12|GPIO13 +10KΩ pullup|8*mcp23017 with addess 0..7
-3         |GPIO15|GPIO14 +10KΩ pullup|8*mcp23017 with addess 0..7
+3         |GPIO15+10KΩ pulldown|GPIO14 +10KΩ pullup|8*mcp23017 with addess 0..7
+
+Be careful with GPIO4 and GPIO5, they are sometimes mislabeled on the silkscreen.
 
 You can add pullups to the ```scl``` pins too, but they are always driven by the esp so it's not required.
 
