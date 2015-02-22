@@ -6,10 +6,14 @@ This can be done by connecting 4*8 [mcp23017 (I²C version)](http://www.microchi
 
 I²C group | scl | sda| mcp23017
 ----------|-----|-----|--------------
-0         |GPIO0|GPIO2| 8*mcp23017 with addess 0..7
-1         |GPIO4|GPIO5|8*mcp23017 with addess 0..7
-2         |GPIO12|GPI13|8*mcp23017 with addess 0..7
-3         |GPIO14|GPI15|8*mcp23017 with addess 0..7
+0         |GPIO0|GPIO2 +10KΩ pullup| 8*mcp23017 with addess 0..7
+1         |GPIO4|GPIO5 +10KΩ pullup|8*mcp23017 with addess 0..7
+2         |GPIO12|GPI13 +10KΩ pullup|8*mcp23017 with addess 0..7
+3         |GPIO15|GPI14 +10KΩ pullup|8*mcp23017 with addess 0..7
+
+You can add pullups to the ```scl``` pins too, but they are always driven by the esp so it's not required.
+
+Take care with the boot mode pins of the esp, GPIO0, GPIO2 should be high and GPIO15 should be low at normal bootup (did i get that right?). 
 
 This is only the default pinout, it's really easy to change.
 
