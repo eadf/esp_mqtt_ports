@@ -28,7 +28,7 @@ CheckBox addCheckbox(ControlP5 cp5, String name, PVector pos) {
     .setSize(10, 10)
     .setItemsPerRow(16)
     .setSpacingColumn(7)
-    .setSpacingRow(7)
+    .setSpacingRow(7);
   for (int i=1;i<=16;i++) {  
     rv.addItem(name+i, i);
   }
