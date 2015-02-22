@@ -130,11 +130,15 @@ mqttDataCb(uint32_t *args, const char* topic, uint32_t topic_len, const char *da
         os_printf("I2C group %d, address %d received data: A=%0x B=%0x\n", group, addr, a, b);
         if (!mcp23017_digitalWriteA(portExpanders+group, addr, a)) {
           os_printf("failed to write port A - got NACK\n");
+          // try to set as output and write again
           mcp23017_pinModeA(portExpanders+group, addr, MCP23017_OUTPUT);
+          mcp23017_digitalWriteA(portExpanders+group, addr, a);
         }
         if (!mcp23017_digitalWriteB(portExpanders+group, addr, b)) {
           os_printf("failed to write port B - got NACK\n");
+          // try to set as output and write again
           mcp23017_pinModeB(portExpanders+group, addr, MCP23017_OUTPUT);
+          mcp23017_digitalWriteB(portExpanders+group, addr, b);
         }
       } else {
         os_printf("Syntax error:%s (i=%d)\n", dataBuf, i);
