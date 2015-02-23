@@ -9,10 +9,9 @@ int myColorBackground;
 
 
 
-
-
-
+// Adjust the mqtt topic 
 String espTopic = "/deviceId/portexpander";
+// Adjust the mqtt broker url
 String mqttBrokerUrl = "mqtt://demo:demo@192.168.0.2";
 
 
