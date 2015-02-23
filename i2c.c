@@ -24,9 +24,6 @@
 #include "easygpio/easygpio.h"
 
 #define I2C_SLEEP_TIME 5 // 5==100KHz
-#define i2c_read() GPIO_INPUT_GET(GPIO_ID_PIN(self->sda_pin));
-#define i2c_disableOutput() GPIO_DIS_OUTPUT(GPIO_ID_PIN(self->sda_pin))
-
 
 static void i2c_start(I2C_Self* self);
 static void i2c_stop(I2C_Self* self);
@@ -71,11 +68,11 @@ static void ICACHE_FLASH_ATTR
 i2c_start(I2C_Self* self) {
   i2c_sda(self, 1);
   i2c_sck(self, 1);
-  os_delay_us(I2C_SLEEP_TIME);
+  i2c_delay_us(I2C_SLEEP_TIME);
   i2c_sda(self, 0);
-  os_delay_us(I2C_SLEEP_TIME);
+  i2c_delay_us(I2C_SLEEP_TIME);
   i2c_sck(self, 0);
-  os_delay_us(I2C_SLEEP_TIME);
+  i2c_delay_us(I2C_SLEEP_TIME);
 }
 
 /**
@@ -85,11 +82,11 @@ i2c_start(I2C_Self* self) {
 static void ICACHE_FLASH_ATTR
 i2c_stop(I2C_Self* self) {
   i2c_sda(self,0); // According to http://en.wikipedia.org/wiki/I%C2%B2C this must be set low
-  os_delay_us(I2C_SLEEP_TIME);
+  i2c_delay_us(I2C_SLEEP_TIME);
   i2c_sck(self,1);
-  os_delay_us(I2C_SLEEP_TIME);
+  i2c_delay_us(I2C_SLEEP_TIME);
   i2c_sda(self,1);
-  os_delay_us(I2C_SLEEP_TIME);
+  i2c_delay_us(I2C_SLEEP_TIME);
 }
 
 /**
@@ -142,34 +139,29 @@ i2c_writeRegister(I2C_Self *self, uint8_t deviceAddr, uint8_t regAddr, uint8_t r
 static bool ICACHE_FLASH_ATTR
 i2c_readByteCheckAck(I2C_Self* self, uint8_t *data) {
   *data = 0;
-  uint8_t data_bit;
-  uint8_t i;
 
-  for (i = 0; i < 8; i++) {
-    os_delay_us(I2C_SLEEP_TIME);
-    if (i==0) i2c_disableOutput();
-    i2c_sck(self,0);
-    os_delay_us(I2C_SLEEP_TIME);
+  uint8_t sdap = self->sda_pin;
+  uint8_t sclp = self->scl_pin;
+  int8_t i;
 
-    i2c_sck(self,1);
-    os_delay_us(I2C_SLEEP_TIME);
-
-    data_bit = !i2c_read();
-    os_delay_us(I2C_SLEEP_TIME);
-
-    data_bit <<= (7 - i);
-    *data |= data_bit;
+  GPIO_DIS_OUTPUT(GPIO_ID_PIN(sdap));
+  for (i = 7; i >= 0; i--) {
+    i2c_delay_us(I2C_SLEEP_TIME);
+    GPIO_OUTPUT_SET(sclp, 1);
+    i2c_delay_us(I2C_SLEEP_TIME);
+    *data |= (GPIO_INPUT_GET(GPIO_ID_PIN(sdap)) << i);
+    GPIO_OUTPUT_SET(sclp, 0);
   }
   // allow slave to ACK or NACK
-  i2c_disableOutput();
-  os_delay_us(I2C_SLEEP_TIME);
+  i2c_delay_us(I2C_SLEEP_TIME);
 
-  i2c_sck(self,1);
-  os_delay_us(I2C_SLEEP_TIME);
-  bool rv = i2c_read();
+  GPIO_OUTPUT_SET(sclp, 1);
+  i2c_delay_us(I2C_SLEEP_TIME);
+  bool rv = !GPIO_INPUT_GET(GPIO_ID_PIN(sdap));
 
-  i2c_sck(self,0);
-  os_delay_us(I2C_SLEEP_TIME);
+  GPIO_OUTPUT_SET(sclp, 0);
+  i2c_delay_us(I2C_SLEEP_TIME);
+
   return rv;
 }
 
@@ -199,10 +191,11 @@ i2c_writeByteCheckAck(I2C_Self* self, uint8_t data) {
 
   GPIO_OUTPUT_SET(sclp, 1);
   i2c_delay_us(I2C_SLEEP_TIME);
-  rv = !i2c_read();
+  rv = !GPIO_INPUT_GET(GPIO_ID_PIN(sdap));
 
   GPIO_OUTPUT_SET(sclp, 0);
   i2c_delay_us(I2C_SLEEP_TIME);
+
   return rv;
 }
 
