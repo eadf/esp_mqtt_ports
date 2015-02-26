@@ -9,7 +9,7 @@ I²C group | sda | scl | mcp23017
 0         |GPIO0+10KΩ pullup|GPIO2 +10KΩ pullup| 8*mcp23017 with address 0..7
 1         |GPIO4+10KΩ pullup|GPIO5 |8*mcp23017 with address 0..7
 2         |GPIO12+10KΩ pullup|GPIO13 |8*mcp23017 with address 0..7
-3         |GPIO14 +10KΩ pullup|GPIO15+10KΩ pulldown|8*mcp23017 with address 0..7
+3         |GPIO14 +10KΩ pullup|GPIO15+10KΩ **pulldown**|8*mcp23017 with address 0..7
 
 Be careful with GPIO4 and GPIO5, they are sometimes mislabeled on the silkscreen.
 
