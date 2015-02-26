@@ -38,6 +38,7 @@
 #include "mem.h"
 #include "stdout/stdout.h"
 #include "mcp23017/mcp23017.h"
+#include "bitutils/bitutils.h"
 
 MQTT_Client mqttClient;
 
