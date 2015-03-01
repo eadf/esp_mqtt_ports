@@ -19,6 +19,17 @@ Take care with the boot mode pins of the esp, GPIO0, GPIO2 should be high and GP
 
 This is only the default pinout, it's really easy to change.
 
+###depencencies
+
+I'm pulling in several git subtree projects :
+* [tuanpmt's mqtt project: esp_mqtt](https://github.com/tuanpmt/esp_mqtt) 
+* [The mcp23017 driver](https://github.com/eadf/esp8266_mcp23017)
+* [The i2c driver](https://github.com/eadf/esp8266_i2c_driver)
+* [gpio helper library](https://github.com/eadf/esp8266_easygpio)
+* [esp8266_stdout](https://github.com/eadf/esp8266_stdout)
+
+The makefile is copied from [esp_mqtt.](https://github.com/tuanpmt/esp_mqtt)
+
 ###mqtt format
 
 topic: ```/deviceId/portexpander```  deviceId is unique to each esp, look in the console. 
