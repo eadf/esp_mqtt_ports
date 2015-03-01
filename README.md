@@ -19,7 +19,7 @@ Take care with the boot mode pins of the esp, GPIO0, GPIO2 should be high and GP
 
 This is only the default pinout, it's really easy to change.
 
-###depencencies
+###dependencies
 
 I'm pulling in several git subtree projects :
 * [tuanpmt's mqtt project: esp_mqtt](https://github.com/tuanpmt/esp_mqtt) 
